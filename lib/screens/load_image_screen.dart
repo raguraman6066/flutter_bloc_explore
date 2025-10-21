@@ -1,4 +1,8 @@
+import 'package:blocexplore/blocs/load_image_bloc/load_image_bloc.dart';
+import 'package:blocexplore/blocs/load_image_bloc/load_image_event.dart';
+import 'package:blocexplore/blocs/load_image_bloc/load_image_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoadImageScreen extends StatefulWidget {
   const LoadImageScreen({super.key});
@@ -13,40 +17,90 @@ class _LoadImageScreenState extends State<LoadImageScreen> {
   @override
   Widget build(BuildContext context) {
     print("Complete UI Rebuild");
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Load Image with setState"),
+        // title: const Text("Load Image with setState"),
+        title: const Text("Load Image with bloc"),
         centerTitle: true,
         backgroundColor: Theme.of(context).primaryColorLight,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            imageUrl.isEmpty
-                ? const Text("No Image")
-                : Image.network(imageUrl, height: 250.0, width: 250.0),
-            const SizedBox(height: 100),
-            ElevatedButton(
-              onPressed: () {
-                if (imageUrl.isEmpty) {
-                  setState(() {
-                    imageUrl =
-                        "https://lwfiles.mycourse.app/droidcon-public/f11ed54687792408d5dfc847bf926bae.png";
-                  });
-                } else {
-                  setState(() {
-                    imageUrl = "";
-                  });
-                }
-              },
-              child: imageUrl.isEmpty
-                  ? const Text("Load Image")
-                  : const Text("Remove Image"),
-            ),
-          ],
-        ),
+      // body: Center(
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: [
+      //       imageUrl.isEmpty
+      //           ? const Text("No Image")
+      //           : Image.network(imageUrl, height: 250.0, width: 250.0),
+      //       const SizedBox(height: 100),
+      //       ElevatedButton(
+      //         onPressed: () {
+      //           if (imageUrl.isEmpty) {
+      //             setState(() {
+      //               imageUrl =
+      //                   "https://lwfiles.mycourse.app/droidcon-public/f11ed54687792408d5dfc847bf926bae.png";
+      //             });
+      //           } else {
+      //             setState(() {
+      //               imageUrl = "";
+      //             });
+      //           }
+      //         },
+      //         child: imageUrl.isEmpty
+      //             ? const Text("Load Image")
+      //             : const Text("Remove Image"),
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      body: BlocConsumer<LoadImageBloc, LoadImageState>(
+        listener: (context, state) {
+          if (state is ImageLoadedState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Image Loaded Successfully!!")),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is ImageLoadingState) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is ImageLoadedState) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("images/berlin.jpg", width: 250, height: 250),
+                  SizedBox(height: 100),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<LoadImageBloc>().add(
+                        RemoveButtonPressedEvent(),
+                      );
+                    },
+                    child: Text("Remove Image"),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("No Image"),
+                  SizedBox(height: 100),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<LoadImageBloc>().add(
+                        LoadButtonPressedEvent(),
+                      );
+                    },
+                    child: Text("Load Image"),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
       ),
     );
   }
