@@ -12,79 +12,100 @@ class CounterApp extends StatelessWidget {
     int count = 0;
     return Scaffold(
       appBar: AppBar(title: Text("Counter App")),
+      //   body: BlocBuilder<CounterBloc, CounterState>(
+      //     builder: (context, state) {
+      //       if (state is IncreasedCounterState) {
+      //         return Container(
+      //           width: double.infinity,
+      //           child: Column(
+      //             mainAxisAlignment: MainAxisAlignment.center,
+      //             crossAxisAlignment: CrossAxisAlignment.center,
+      //             children: [
+      //               Text("${++count}"),
+      //               ElevatedButton(
+      //                 onPressed: () {
+      //                   context.read<CounterBloc>().add(IncrementCounterEvent());
+      //                 },
+      //                 child: Text("+"),
+      //               ),
+      //               ElevatedButton(
+      //                 onPressed: () {
+      //                   context.read<CounterBloc>().add(DecrementCounterEvent());
+      //                 },
+      //                 child: Text("-"),
+      //               ),
+      //             ],
+      //           ),
+      //         );
+      //       } else if (state is InitialCounterState) {
+      //         return Container(
+      //           width: double.infinity,
+      //           child: Column(
+      //             mainAxisAlignment: MainAxisAlignment.center,
+      //             crossAxisAlignment: CrossAxisAlignment.center,
+      //             children: [
+      //               Text("${count}"),
+      //               ElevatedButton(
+      //                 onPressed: () {
+      //                   context.read<CounterBloc>().add(IncrementCounterEvent());
+      //                 },
+      //                 child: Text("+"),
+      //               ),
+      //               ElevatedButton(
+      //                 onPressed: () {
+      //                   context.read<CounterBloc>().add(DecrementCounterEvent());
+      //                 },
+      //                 child: Text("-"),
+      //               ),
+      //             ],
+      //           ),
+      //         );
+      //       } else {
+      //         return Container(
+      //           width: double.infinity,
+      //           child: Column(
+      //             mainAxisAlignment: MainAxisAlignment.center,
+      //             crossAxisAlignment: CrossAxisAlignment.center,
+      //             children: [
+      //               Text("${--count}"),
+      //               ElevatedButton(
+      //                 onPressed: () {
+      //                   context.read<CounterBloc>().add(IncrementCounterEvent());
+      //                 },
+      //                 child: Text("+"),
+      //               ),
+      //               ElevatedButton(
+      //                 onPressed: () {
+      //                   context.read<CounterBloc>().add(DecrementCounterEvent());
+      //                 },
+      //                 child: Text("-"),
+      //               ),
+      //             ],
+      //           ),
+      //         );
+      //       }
+      //     },
+      //   ),
       body: BlocBuilder<CounterBloc, CounterState>(
         builder: (context, state) {
-          if (state is IncreasedCounterState) {
-            return Container(
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text("${++count}"),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<CounterBloc>().add(IncrementCounterEvent());
-                    },
-                    child: Text("+"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<CounterBloc>().add(DecrementCounterEvent());
-                    },
-                    child: Text("-"),
-                  ),
-                ],
-              ),
-            );
-          } else if (state is InitialCounterState) {
-            return Container(
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text("${count}"),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<CounterBloc>().add(IncrementCounterEvent());
-                    },
-                    child: Text("+"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<CounterBloc>().add(DecrementCounterEvent());
-                    },
-                    child: Text("-"),
-                  ),
-                ],
-              ),
-            );
-          } else {
-            return Container(
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text("${--count}"),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<CounterBloc>().add(IncrementCounterEvent());
-                    },
-                    child: Text("+"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<CounterBloc>().add(DecrementCounterEvent());
-                    },
-                    child: Text("-"),
-                  ),
-                ],
-              ),
-            );
-          }
+          return Center(child: Text("${state.counterValue}"));
         },
+      ),
+      floatingActionButton: Row(
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              context.read<CounterBloc>().add(IncrementCounterEvent());
+            },
+            child: Text("+"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              context.read<CounterBloc>().add(DecrementCounterEvent());
+            },
+            child: Text("-"),
+          ),
+        ],
       ),
     );
   }

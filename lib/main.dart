@@ -16,10 +16,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      // create: (BuildContext context) {
-      //   return LoadImageBloc();
-      // },
-      create: (context) => CounterBloc(),
+      create: (BuildContext context) {
+        return LoadImageBloc();
+      },
+      // create: (context) => CounterBloc(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Blocify',
@@ -27,8 +27,8 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        // home: const LoadImageScreen(),
-        home: const CounterApp(),
+        home: const LoadImageScreen(),
+        // home: const CounterApp(),
       ),
     );
   }
