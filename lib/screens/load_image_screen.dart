@@ -1,6 +1,7 @@
 import 'package:blocexplore/blocs/load_image_bloc/load_image_bloc.dart';
 import 'package:blocexplore/blocs/load_image_bloc/load_image_event.dart';
 import 'package:blocexplore/blocs/load_image_bloc/load_image_state.dart';
+import 'package:blocexplore/models/my_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -65,20 +66,42 @@ class _LoadImageScreenState extends State<LoadImageScreen> {
             return Center(child: CircularProgressIndicator());
           } else if (state is ImageLoadedState) {
             return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset("images/berlin.jpg", width: 250, height: 250),
-                  SizedBox(height: 100),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<LoadImageBloc>().add(
-                        RemoveButtonPressedEvent(),
-                      );
-                    },
-                    child: Text("Remove Image"),
-                  ),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Image.asset(state.allImages, width: 250, height: 250),
+                    ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 60,
+                        vertical: 30,
+                      ),
+                      itemCount: state.allImages.length,
+                      itemBuilder: (context, index) {
+                        MyImage myImage = state.allImages[index];
+                        return Card(
+                          child: Image.asset(
+                            myImage.url,
+                            width: myImage.size,
+                            height: myImage.size,
+                            fit: BoxFit.fill,
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(height: 100),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<LoadImageBloc>().add(
+                          RemoveButtonPressedEvent(),
+                        );
+                      },
+                      child: Text("Remove Image"),
+                    ),
+                  ],
+                ),
               ),
             );
           } else {
@@ -91,7 +114,9 @@ class _LoadImageScreenState extends State<LoadImageScreen> {
                   ElevatedButton(
                     onPressed: () {
                       context.read<LoadImageBloc>().add(
-                        LoadButtonPressedEvent(),
+                        LoadButtonPressedEvent(
+                          // imageUrl: "images/berlin.jpg"
+                        ),
                       );
                     },
                     child: Text("Load Image"),
