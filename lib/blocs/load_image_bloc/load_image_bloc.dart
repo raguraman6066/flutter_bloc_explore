@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class LoadImageBloc extends Bloc<LoadImageEvent, LoadImageState> {
   LoadImageBloc() : super(ImageNotLoadingState()) {
     on<LoadButtonPressedEvent>((event, emit) async {
-      emit(ImageLoadingState());
+      // emit(ImageLoadingState());
       List<Map<String, dynamic>> fetchImages = await Future.delayed(
         Duration(seconds: 1),
         () {
@@ -22,5 +22,34 @@ class LoadImageBloc extends Bloc<LoadImageEvent, LoadImageState> {
     on<RemoveButtonPressedEvent>((event, emit) async {
       emit(ImageNotLoadingState());
     });
+  }
+
+  @override
+  void onChange(Change<LoadImageState> change) {
+    super.onChange(change);
+    print("onchange observer: ");
+    print(change.currentState.toString());
+    print(change.nextState.toString());
+  }
+
+  @override
+  void onTransition(Transition<LoadImageEvent, LoadImageState> transition) {
+    super.onTransition(transition);
+    print("onTransition observer: ");
+    print(transition.toString());
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+    print("onError Observer: ");
+    print(error.toString());
+  }
+
+  @override
+  void onEvent(LoadImageEvent event) {
+    super.onEvent(event);
+    print("OnEvent Observer: ");
+    print(event.toString());
   }
 }

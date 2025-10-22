@@ -1,6 +1,7 @@
 import 'package:blocexplore/blocs/load_image_bloc/load_image_bloc.dart';
 import 'package:blocexplore/blocs/load_image_bloc/load_image_event.dart';
 import 'package:blocexplore/blocs/load_image_bloc/load_image_state.dart';
+import 'package:blocexplore/cubits/load_image_cubit/load_image_cubit.dart';
 import 'package:blocexplore/models/my_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +22,8 @@ class _LoadImageScreenState extends State<LoadImageScreen> {
     return Scaffold(
       appBar: AppBar(
         // title: const Text("Load Image with setState"),
-        title: const Text("Load Image with bloc"),
+        // title: const Text("Load Image with bloc"),
+        title: const Text("Load Image with cubit"),
         centerTitle: true,
         backgroundColor: Theme.of(context).primaryColorLight,
       ),
@@ -53,7 +55,8 @@ class _LoadImageScreenState extends State<LoadImageScreen> {
       //     ],
       //   ),
       // ),
-      body: BlocConsumer<LoadImageBloc, LoadImageState>(
+      // body: BlocConsumer<LoadImageBloc, LoadImageState>(
+      body: BlocConsumer<LoadImageCubit, LoadImageState>(
         listener: (context, state) {
           if (state is ImageLoadedState) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -62,6 +65,7 @@ class _LoadImageScreenState extends State<LoadImageScreen> {
           }
         },
         builder: (context, state) {
+          print("Bloc Rebuilding");
           if (state is ImageLoadingState) {
             return Center(child: CircularProgressIndicator());
           } else if (state is ImageLoadedState) {
@@ -94,12 +98,22 @@ class _LoadImageScreenState extends State<LoadImageScreen> {
                     SizedBox(height: 100),
                     ElevatedButton(
                       onPressed: () {
-                        context.read<LoadImageBloc>().add(
-                          RemoveButtonPressedEvent(),
-                        );
+                        // context.read<LoadImageBloc>().add(
+                        //   RemoveButtonPressedEvent(),
+                        // );
+
+                        context.read<LoadImageCubit>().removeImage();
                       },
                       child: Text("Remove Image"),
                     ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     context.read<LoadImageBloc>().add(
+                    //       LoadButtonPressedEvent(),
+                    //     );
+                    //   },
+                    //   child: Text("Load Image"),
+                    // ),
                   ],
                 ),
               ),
@@ -113,11 +127,12 @@ class _LoadImageScreenState extends State<LoadImageScreen> {
                   SizedBox(height: 100),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<LoadImageBloc>().add(
-                        LoadButtonPressedEvent(
-                          // imageUrl: "images/berlin.jpg"
-                        ),
-                      );
+                      // context.read<LoadImageBloc>().add(
+                      //   LoadButtonPressedEvent(
+                      //     // imageUrl: "images/berlin.jpg"
+                      //   ),
+                      // );
+                      context.read<LoadImageCubit>().loadImage();
                     },
                     child: Text("Load Image"),
                   ),

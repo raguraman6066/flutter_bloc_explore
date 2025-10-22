@@ -1,6 +1,7 @@
 import 'package:blocexplore/blocs/load_image_bloc/load_image_bloc.dart';
 import 'package:blocexplore/counterapp/counter/counter_bloc.dart';
 import 'package:blocexplore/counterapp/counterapp.dart';
+import 'package:blocexplore/cubits/load_image_cubit/load_image_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import './screens/load_image_screen.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +16,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) {
-        return LoadImageBloc();
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => LoadImageBloc()),
+        BlocProvider(create: (context) => LoadImageCubit()),
+      ],
       // create: (context) => CounterBloc(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
